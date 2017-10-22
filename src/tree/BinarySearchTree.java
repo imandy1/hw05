@@ -24,12 +24,14 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 		else{
 			try{
-				BSTNode parent = insertHelper(key);
+				BSTNode<E> parent = insertHelper(key);
 				if(key.compareTo((E) parent.getData()) == -1){
 					parent.left = child;
+					child.parent = parent;
 				}
 				else if(key.compareTo((E) parent.getData()) == 1){
 					parent.right = child;
+					child.parent = parent;
 				}
 			}
 			catch(DuplicateItemException e){
@@ -58,7 +60,30 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return parent;
 	}
 	public void delete(E key){
+		if(isLeaf(deleteHelper(key))){
+		}
+	}
+	/**
+	 * Finds the node to delete using the key specified in the parameters
+	 * @param key
+	 * @return
+	 */
+	private BSTNode<E> deleteHelper(E key){
+		BSTNode<E> current = root;
 		
+		while(current != null){
+			if(key.compareTo((E) current.getData()) == 0){
+				return current;
+			}
+			else if(key.compareTo((E) current.getData()) == -1){
+				current = current.left;
+			}
+			else if(key.compareTo((E) current.getData()) == 1){
+				current = current.right;
+			}
+		}
+		
+		return null;
 	}
 	public boolean find(E key){
 		BSTNode<E> current = root;
@@ -88,13 +113,22 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return false;
 	}
 	public boolean isLeaf(BSTNode<E> node){
-		return true;
+		//add exception for when node is not in tree
+		if(node.right == null && node.left == null){
+			return true;
+		}
+		return false;
 	}
-	public boolean isLeftChild(BSTNode<E> node){
-		return true;
+	public void isLeftChild(BSTNode<E> node){
+		System.out.println(node.parent == null);
+		
+		
 	}
 	public boolean isRightChild(BSTNode<E> node){
-		return true;
+		if(node.parent.right.getData().compareTo(node.getData()) == 0){
+			return true;
+		}
+		return false;
 	}
 	public BSTNode<E> sibling(BSTNode<E> node){
 		return null;
@@ -158,6 +192,24 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	        System.out.print(node.getData());
 	    }
 	    System.out.println();
+	}
+	
+	public BSTNode<E> findNode(E key){
+		BSTNode<E> current = root;
+		while(current != null){
+			if(key.compareTo((E) current.getData()) == 0){
+				return current;
+			}
+			else if(key.compareTo((E) current.getData()) == 1){
+				current = current.right;
+			}
+			else if(key.compareTo((E) current.getData()) == -1){
+				current = current.left;
+			}
+		}	
+		return null;
+
+		
 	}
 	
 }
