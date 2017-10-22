@@ -5,7 +5,7 @@ public class main {
 		BinarySearchTree<Integer> tree= new BinarySearchTree();
 		
 		
-		Integer[] arr = {50, 11, 21, 51, 80};
+		Integer[] arr = {50, 25, 75, 100, 60, 11, 5, 13, 102, 15};
 		
 		
 		BinarySearchTree<Integer> tree1= new BinarySearchTree(arr);
@@ -13,6 +13,25 @@ public class main {
 
 		tree1.printTree();
 		
-		tree1.isLeftChild(tree1.findNode(80));
+		
+		
+		for(int i = 0; i < tree1.preorder(tree1.findNode(50)).size(); i++){
+			System.out.print(tree1.preorder(tree1.findNode(50)).get(i).getData() + " ");
+		}
+		
+		System.out.println();
+		for(int i = 0; i < tree1.inorder(tree1.findNode(50)).size(); i++){
+			System.out.print(tree1.inorder(tree1.findNode(50)).get(i).getData() + " ");
+		}
+		System.out.println();
+		for(int i = 0; i < tree1.postorder(tree1.findNode(50)).size(); i++){
+			System.out.print(tree1.postorder(tree1.findNode(50)).get(i).getData() + " ");
+		}
+		System.out.println();
+		
+		tree1.printParentValue(75);
+		
+		
+		
 	}
 }

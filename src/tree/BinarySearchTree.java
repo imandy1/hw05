@@ -1,6 +1,7 @@
 package tree;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class BinarySearchTree<E extends Comparable<E>> {
 	private BSTNode<E> root;
@@ -60,7 +61,35 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return parent;
 	}
 	public void delete(E key){
-		if(isLeaf(deleteHelper(key))){
+		delete(deleteHelper(key));
+	}
+	public void delete(BSTNode<E> node){
+		if(isLeaf(node)){
+			if(isLeftChild(node)){
+				node.parent.left = null;
+			}
+			else if(isRightChild(node)){
+				node.parent.right = null;
+			}
+		}
+		else if(numOfChildren(node) == 1){
+			BSTNode<E> child = null;
+			if(node.left != null){
+				child = node.left;
+			}
+			else if(node.right != null){
+				child = node.right;
+			}
+			
+			if(isLeftChild(node)){
+				node.parent.left = child;
+			}
+			else if(isRightChild(node)){
+				node.parent.right = child;
+			}
+		}
+		else if(numOfChildren(node) == 2){
+			
 		}
 	}
 	/**
@@ -84,6 +113,18 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 		
 		return null;
+	}
+	public int numOfChildren(BSTNode<E> node){
+		int children = 0;
+		
+		if(node.left != null && node.right != null){
+			children = 2;
+		}
+		else if(node.right != null || node.left != null){
+			children = 1;
+		}
+		
+		return children;
 	}
 	public boolean find(E key){
 		BSTNode<E> current = root;
@@ -119,13 +160,26 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		}
 		return false;
 	}
-	public void isLeftChild(BSTNode<E> node){
-		System.out.println(node.parent == null);
-		
-		
+	public boolean isLeftChild(BSTNode<E> node){
+		if(node == root){
+			return false;
+		}
+		else if(node.parent.left == null){
+			return false;
+		}
+		else if(node.parent.left.getData().compareTo(node.getData()) == 0){
+			return true;
+		}
+		return false;
 	}
 	public boolean isRightChild(BSTNode<E> node){
-		if(node.parent.right.getData().compareTo(node.getData()) == 0){
+		if(node == root){
+			return false;
+		}
+		else if(node.parent.right == null){
+			return false;
+		}
+		else if(node.parent.right.getData().compareTo(node.getData()) == 0){
 			return true;
 		}
 		return false;
@@ -139,17 +193,56 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	public BSTNode<E> grandparent(BSTNode<E> node){
 		return null;
 	}
-	public ArrayList<BSTNode<E>> preorder(){
-		return null;
+	public List<BSTNode<E>> preorder(BSTNode<E> node){
+		List<BSTNode<E>> list = new ArrayList<>();
+		printPreOrder(node, list);
+		return list;
 	}
-	public ArrayList<BSTNode<E>> inorder(){
-		return null;
+	/**
+	 * helper method for preorder. Used to pass an list into the method
+	 * so we can use the list to store values
+	 * @param node
+	 * @param list
+	 */
+	public void printPreOrder(BSTNode<E> node, List<BSTNode<E>> list){
+		if(node == null){
+			return;
+		}
+		list.add(node);
+		printPreOrder(node.left, list);
+		printPreOrder(node.right, list);
 	}
-	public ArrayList<BSTNode<E>> postorder(){
-		return null;
+	public List<BSTNode<E>> inorder(BSTNode<E> node){
+		List<BSTNode<E>> list = new ArrayList<>();
+		printInOrder(node, list);
+		return list;
+	}
+	public void printInOrder(BSTNode<E> node, List<BSTNode<E>> list){
+		if(node == null){
+			return;
+		}
+		printInOrder(node.left, list);
+		list.add(node);
+		printInOrder(node.right, list);
+	}
+	public List<BSTNode<E>> postorder(BSTNode<E> node){
+		List<BSTNode<E>> list = new ArrayList<>();
+		printPostOrder(node, list);
+		return list;
+	}
+	public void printPostOrder(BSTNode<E> node, List<BSTNode<E>> list){
+		if(node == null){
+			return;
+		}
+		printPostOrder(node.left, list);
+		printPostOrder(node.right, list);
+		list.add(node);
 	}
 	public ArrayList<BSTNode<E>> breadthfirst(){
 		return null;
+	}
+	public void printParentValue(E value){
+		System.out.println(findNode(value).parent.getData());
 	}
 	public void printTree() {
 
