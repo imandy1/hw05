@@ -10,10 +10,32 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	}
 	
 	public BinarySearchTree(E[] array){
-		
+		// note if using array type like int[] need to use Integer[] instead
+		for(int i = 0; i < array.length; i++){
+			insert(array[i]);
+		}
 	}
 	
 	public void insert(E key){
+		BSTNode child = new BSTNode(key);
+		
+		if(root == null){
+			root = child;
+		}
+		else{
+			try{
+				BSTNode parent = insertHelper(key);
+				if(key.compareTo((E) parent.getData()) == -1){
+					parent.left = child;
+				}
+				else if(key.compareTo((E) parent.getData()) == 1){
+					parent.right = child;
+				}
+			}
+			catch(DuplicateItemException e){
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	private BSTNode<E> insertHelper(E key) throws DuplicateItemException{
@@ -21,7 +43,7 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		BSTNode<E> parent = null;
 		
 		while(current != null){
-			if(key.compareTo(key) == 1){
+			if(key.compareTo(current.getData()) == 0){
 				throw new DuplicateItemException("Error: item trying to insert is already in tree");
 			}
 			else if(key.compareTo(current.getData()) == -1){
@@ -60,7 +82,10 @@ public class BinarySearchTree<E extends Comparable<E>> {
 		return 0;
 	}
 	public boolean isEmpty(){
-		return true;
+		if(root == null){
+			return true;
+		}
+		return false;
 	}
 	public boolean isLeaf(BSTNode<E> node){
 		return true;
@@ -91,6 +116,48 @@ public class BinarySearchTree<E extends Comparable<E>> {
 	}
 	public ArrayList<BSTNode<E>> breadthfirst(){
 		return null;
+	}
+	public void printTree() {
+
+	    if (this.root.right != null) {
+	        this.printTree(this.root.right, true, "");
+	    }
+
+	    printNodeValue(this.root);
+
+	    if (this.root.left != null) {
+	        this.printTree(this.root.left, false, "");
+	    }
+	}
+
+	private void printTree(BSTNode<E> node, boolean isRight, String indent) {
+	    if (node.right != null) {
+	        printTree(node.right, true, indent + (isRight ? "        " : " |      "));
+	    }
+
+	    System.out.print(indent);
+
+	    if (isRight) {
+	        System.out.print(" /");
+	    }
+	    else {
+	        System.out.print(" \\");
+	    }
+	    System.out.print("----- ");
+	    printNodeValue(node);
+	    if (node.left != null) {
+	        printTree(node.left, false, indent + (isRight ? " |      " : "        "));
+	    }
+	}
+
+	private void printNodeValue(BSTNode<E> node) {
+	    if (node == null) {
+	        System.out.print("<null>");
+	    }
+	    else {
+	        System.out.print(node.getData());
+	    }
+	    System.out.println();
 	}
 	
 }
